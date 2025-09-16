@@ -1,42 +1,16 @@
-from tkinter import *
-import random
-
+from tkinter import * 
+from Food import Food
+from Snake import Snake
 
 GAME_WIDTH = 600
 GAME_HEIGHT = 600
 SPEED = 100
-SPACE_SIZE = 50
+SPACE_SIZE = 10
 BODY_PARTS = 3
 SNAKE_COLOR = "#FF9100"
 FOOD_COLOR = "#FF0000"
 BACKGROUND_COLOR = "#000000"
 
-
-class Snake:
-    def __init__(self):
-        # Initialize the snake's body size and coordinates
-        self.body_size = BODY_PARTS # Initial body size
-        self.coordinates = [] # List to store the coordinates of each body part
-        self.squares = [] # 
-        
-        # 
-        for i in range(0, BODY_PARTS):
-            self.coordinates.append([0, 0])
-
-        for x, y in self.coordinates:
-            square = canvas.create_rectangle(x, y , x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR , tags="snake")
-            self.squares.append(square)
-
-class Food:
-    def __init__(self):
-        
-        # Generate random food coordinates (fix float division issue)
-        x = random.randint(0, int(GAME_WIDTH/SPACE_SIZE)-1) * SPACE_SIZE
-        y = random.randint(0, int(GAME_HEIGHT/SPACE_SIZE)-1) * SPACE_SIZE
-        # Store the food coordinates
-        self.coordinates = [x, y]
-        # Create the food square on the canvas
-        canvas.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOR, tag="food")
 
 # Game Logic Functions
 def Next_Turn(snake, food):
@@ -76,7 +50,7 @@ def Next_Turn(snake, food):
         
         canvas.delete("food")
         
-        food = Food()
+        food = Food(canvas, GAME_WIDTH, GAME_HEIGHT, SPACE_SIZE, FOOD_COLOR)
     
     else:
         del snake.coordinates[-1]
@@ -161,9 +135,11 @@ window.bind('<Right>', lambda event: Change_Direction('right'))
 window.bind('<Up>', lambda event: Change_Direction('up'))
 window.bind('<Down>', lambda event: Change_Direction('down'))
 
-# Bindings
-snake = Snake()
-food = Food()
+window.focus_set()
+
+# Create game objects
+snake = Snake(canvas, BODY_PARTS, SNAKE_COLOR, SPACE_SIZE)
+food = Food(canvas, GAME_WIDTH, GAME_HEIGHT, SPACE_SIZE, FOOD_COLOR)
 
 Next_Turn(snake, food)
 
